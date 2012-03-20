@@ -3,7 +3,7 @@
   "name": "modifier",
   "description": "JavaScript validator / modifier",
   "keywords": ["validate", "modify", "typecheck", "utility"],
-  "version": "0.0.1",
+  "version": "0.0.2",
   "repository": {
     "url": "git://github.com/shinout/modifier"
   },

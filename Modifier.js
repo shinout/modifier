@@ -1,4 +1,4 @@
-const Modifier = {
+var Modifier = {
   /* validators */
 
   integer: function(v) {
@@ -231,8 +231,8 @@ Modifier.where = Modifier.bind;
 
 // for Node.js
 if (typeof exports == 'object' && exports === this) {
-  const fs  = require('fs');
-  const pth = require('path');
+  var fs  = require('fs');
+  var pth = require('path');
 
   Modifier.mappers.file = ['normalize'];
 
@@ -284,7 +284,7 @@ if (typeof exports == 'object' && exports === this) {
 Modifier.empty.prototype = Modifier;
 
 /* extension of each method */
-const ModifierExtensions = Object.create(Object.prototype, {
+var ModifierExtensions = Object.create(Object.prototype, {
   quiet: {
     get: function() {
       return this.bind({quiet: true});
