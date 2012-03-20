@@ -52,6 +52,7 @@ var Modifier = {
         v = '';
       }
     }
+    if (this.trim) v = v.trim();
     var len = v.length;
     if (min != null && len < min) return Modifier.error.call(this, {reason: 'minLength', val: v});
     if (max != null && len > max) return Modifier.error.call(this, {reason: 'maxLength', val: v});

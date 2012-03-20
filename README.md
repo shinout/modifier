@@ -248,6 +248,14 @@ wheres
 
 <tr>
 <th>string</th>
+<th>trim</th>
+<td>trim spaces</td>
+<td>fn = Modifier.string.where({trim: true})</td>
+<td>-</td>
+</tr>
+
+<tr>
+<th>string</th>
 <th>min</th>
 <td>minimum allowable length</td>
 <td>fn = Modifier.string.where({min: 7})</td>

@@ -130,6 +130,10 @@ vows.describe('== TESTING Modifier ==').addBatch({
       assert.strictEqual("1192", fn(1192));
     },
 
+    "trim" : function(fn) {
+      assert.strictEqual("trimmed", fn.where({trim: true})("    trimmed       "));
+    },
+
     "number is not allowed with strict" : function(fn) {
       try {
         fn.strict(1192);
