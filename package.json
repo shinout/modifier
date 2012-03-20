@@ -1,0 +1,23 @@
+{
+  "author": "SHIN Suzuki <shinout310@gmail.com>",
+  "name": "modifier",
+  "description": "JavaScript validator / modifier",
+  "keywords": ["validate", "modify", "typecheck", "utility"],
+  "version": "0.0.1",
+  "repository": {
+    "url": "git://github.com/shinout/modifier"
+  },
+  "main": "Modifier.js",
+  "scripts": {
+    "test": "vows test/*.js"
+  },
+  "engines": {
+    "node": "*"
+  },
+  "dependencies": {
+  },
+  "devDependencies": {
+    "vows" : ">=0.6.2"
+  },
+  "optionalDependencies": {}
+}
