@@ -52,7 +52,6 @@ var Modifier = {
         v = '';
       }
     }
-    if (this.trim) v = v.trim();
     var len = v.length;
     if (min != null && len < min) return Modifier.error.call(this, {reason: 'minLength', val: v});
     if (max != null && len > max) return Modifier.error.call(this, {reason: 'maxLength', val: v});
@@ -105,6 +104,7 @@ var Modifier = {
     if (!("pattern" in this)) {
       return Modifier.error.call(this, {reason: 'noPattern' ,val: v});
     }
+    console.log(v.toString(), this.pattern, v.toString().match(this.pattern))
 
     if (! v.toString().match(this.pattern)) return Modifier.error.call(this, {reason: 'notMatch', val : v});
     return v;
@@ -156,13 +156,14 @@ var Modifier = {
 
   every: function() {
     var args = arguments;
-    return function(v) {
+    return function() {
+      var vals = arguments;
       Array.prototype.forEach.call(args, function(fn) {
         if (typeof fn == 'function') {
-          v = fn(v);
+          vals[0] = fn.apply(null, vals);
         }
       });
-      return v;
+      return vals[0];
     };
   },
 
@@ -348,152 +349,4 @@ Object.keys(Modifier).forEach(function(k) {
 });
 
 Object.freeze(Modifier);
-
-
-
-function ModifierTest() {
-  console.log(Modifier.string.bind({min: 11}).quiet('eeeeeeeeeeeeee'));
-  console.log('QUIET', Modifier.bind('string', {min:8, max:14}).quiet);
-  console.log('QUIET', Modifier.bind('string', {min:8, max:14}).__proto__);
-  console.log('QUIET', Modifier.bind('string', {min:8, max:14}).__proto__);
-  console.log(Modifier.integer(33));
-  console.log(Modifier.bind('integer')(13));
-
-  try {
-    console.log(Modifier.bind('integer', 14)(13));
-  } catch (e) { console.log(e.message); }
-
-  try {
-  console.log(Modifier.set('integer', {max: 11})(13));
-  } catch (e) { console.log(e.message); }
-
-  try {
-  console.log(Modifier.integer.set({max: 11, strict: true})("1"));
-  } catch (e) { console.log(e.message); }
-
-  try {
-  console.log(Modifier.integer.call({max: 11, strict: true}, 33));
-  } catch (e) { console.log(e.message); }
-
-  try {
-  console.log(Modifier.integer.bind({max: 11}).strict("3"));
-  } catch (e) { console.log(e.message); }
-
-  try {
-  console.log(Modifier.integer.bind({max: 11}).quiet.strict("3"));
-  } catch (e) { console.log(e.message); }
-
-  try {
-  console.log(Modifier.number.bind({max: 11.3, strict: true, quiet: true})(11.9));
-  } catch (e) { console.log(e.message); }
-
-  try {
-  console.log(Modifier.noerror(Modifier.bind('number', null, 11.3))(11.9));
-  } catch (e) { console.log(e.message); }
-
-  try {
-    console.log(Modifier.bind('string', {min:8, max:14})('shinout'));
-  } catch (e) { console.log(e.message); }
-
-  try {
-    console.log(Modifier.bind('regex', /a/)('shinout'));
-  } catch (e) { console.log(e.message); }
-
-  try {
-    console.log(Modifier.bind('regex', {pattern: /a/})('shinout'));
-  } catch (e) { console.log(e.message); }
-
-  try {
-    console.log(Modifier.bool.bind({strict: true})(''));
-  } catch (e) { console.log(e.message); }
-
-  try {
-    console.log(Modifier.bool.bind({strict: true}).quiet(''));
-  } catch (e) { console.log(e.message); }
-
-	console.log("0 is ", Modifier.bool(0));
-	console.log("0 with zerostr is ", Modifier.bool.bind({zerostr: true})(0));
-	console.log("'' is ", Modifier.bool(''));
-	console.log("'' with zerostr is ", Modifier.bool.bind({zerostr: true})(''));
-	console.log("'0' is ", Modifier.bool('0'));
-	console.log("'0' with zerostr is ", Modifier.bool.bind({zerostr: true})('0'));
-	console.log("'0.00' is ", Modifier.bool('0.00'));
-	console.log("'0.00' with zerostr is ", Modifier.bool.bind({zerostr: true})('0.00'));
-
-  try {
-    console.log(Modifier.equal.bind({value: 133})('133'));
-  } catch (e) { console.log(e.message); }
-
-  try {
-    console.log(Modifier.equal.bind({value: 133, strict: true})('133'));
-  } catch (e) { console.log(e.message); }
-
-  try {
-    console.log(Modifier.bind('equal', 133, true)('133'));
-  } catch (e) { console.log(e.message); }
-
-  try {
-    console.log(Modifier.bind('isNull')(undefined));
-  } catch (e) { console.log(e.message); }
-
-  try {
-    console.log(Modifier.bind('isUndefined')(null));
-  } catch (e) { console.log(e.message); }
-
-  try {
-    console.log(Modifier.bind('isUndefined', true)(null));
-  } catch (e) { console.log(e.message); }
-
-  try {
-    console.log(Modifier.bind('oneof', ['male', 'female'])('man'));
-  } catch (e) { console.log(e.message); }
-
-  try {
-    console.log(Modifier.bind('oneof', [])('man'));
-  } catch (e) { console.log(e.message); }
-
-  console.log(Modifier.bind('oneof', ['male', 'female'])('female'));
-
-  console.log(Modifier.regex.set({pattern: /^get[A-Za-z0-9]+$/}));
-
-  console.log(
-    Modifier.every(
-      Modifier.string,
-      Modifier.bind('regex', {pattern: /^get[A-Za-z0-9]+$/})
-    )('getConfig')
-  );
-
-  console.log(
-    Modifier.some(
-      Modifier.string,
-      Modifier.bind('regex', {pattern: /^get[A-Za-z0-9]+$/})
-    )('getConfig##')
-  );
-
-  if (typeof exports === "object") {
-    try {
-      console.log(Modifier.bind('path')('Modifier.js'));
-    } catch (e) { console.log(e.message); }
-
-    try {
-      console.log(Modifier.bind('path')('Modifier.css'));
-    } catch (e) { console.log(e.message); }
-
-    try {
-      console.log(Modifier.dir('Modifier.js'));
-    } catch (e) { console.log(e.message); }
-
-    try {
-      console.log(Modifier.path('././Modifier.js'));
-    } catch (e) { console.log(e.message); }
-
-    try {
-      console.log(Modifier.bind('path', null, true)('././Modifier.js'));
-    } catch (e) { console.log(e.message); }
-  }
-  else {
-    console.log(module.exports);
-  }
-}
-
 if (typeof exports === "object" && this === exports) module.exports = Modifier;

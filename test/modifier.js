@@ -130,10 +130,6 @@ vows.describe('== TESTING Modifier ==').addBatch({
       assert.strictEqual("1192", fn(1192));
     },
 
-    "trim" : function(fn) {
-      assert.strictEqual("trimmed", fn.where({trim: true})("    trimmed       "));
-    },
-
     "number is not allowed with strict" : function(fn) {
       try {
         fn.strict(1192);
@@ -332,13 +328,8 @@ vows.describe('== TESTING Modifier ==').addBatch({
     },
 
     "quiet" : function(fn) {
-      try {
       var und = fn.where({value: "dd"}).quiet("aaaaaaa");
-      console.log(und)
-      }
-      catch (e) {
-        console.log(e)
-      }
+      assert.isUndefined(und);
     },
   },
 
@@ -467,7 +458,7 @@ vows.describe('== TESTING Modifier ==').addBatch({
     },
 
     "match" : function(fn) {
-      assert.equal("shinout", fn.where({pattern: /[a-z]+/})("shinout"));
+      assert.equal("shin@shinout.net", fn.where({pattern: /^[A-Za-z0-9]+[\w-]+@[\w\.-]+\.\w{2,}$/})("shin@shinout.net"));
     },
 
     "not match" : function(fn) {
