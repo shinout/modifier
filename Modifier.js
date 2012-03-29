@@ -104,7 +104,6 @@ var Modifier = {
     if (!("pattern" in this)) {
       return Modifier.error.call(this, {reason: 'noPattern' ,val: v});
     }
-    console.log(v.toString(), this.pattern, v.toString().match(this.pattern))
 
     if (! v.toString().match(this.pattern)) return Modifier.error.call(this, {reason: 'notMatch', val : v});
     return v;
