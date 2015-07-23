@@ -303,9 +303,7 @@ var ModifierExtensions = Object.create(Object.prototype, {
 });
 
 /* ModifierExtensions inherits Function.prototype */
-Object.getOwnPropertyNames(Function.prototype).forEach(function(k) {
-  ModifierExtensions[k] = Function.prototype[k];
-});
+ModifierExtensions.__proto__ = Function.prototype
 
 /* ModifierExtensions overrides Function.prototype.bind */
 ModifierExtensions.bind = function(obj) {
